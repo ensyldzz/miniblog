@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:blog_app/product/models/blog_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
 class BlogServices {
   final String url = "https://tobetoapi.halitkalayci.com/api/Articles";
@@ -56,5 +57,30 @@ class BlogServices {
     if (response.statusCode != 204) {
       throw Exception('Failed to delete blog');
     }
+  }
+
+  Future<bool> createBlog({
+    required String title,
+    required String content,
+    required String author,
+    XFile? selectedImage,
+  }) async {
+    Uri url = Uri.parse("https://tobetoapi.halitkalayci.com/api/Articles");
+
+    var request = http.MultipartRequest("POST", url);
+    request.fields["Title"] = title;
+    request.fields["Content"] = content;
+    request.fields["Author"] = author;
+
+    if (selectedImage != null) {
+      final file = await http.MultipartFile.fromPath("File", selectedImage.path);
+      request.files.add(file);
+    } else {
+      throw Exception('Resim seçilmedi!');
+    }
+
+    final response = await request.send();
+
+    return response.statusCode == 201; // Başarılı eklenme durumunu döner
   }
 }

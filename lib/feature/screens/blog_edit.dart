@@ -3,41 +3,59 @@ import 'package:blog_app/product/constants/colors_items.dart';
 import 'package:blog_app/product/constants/icon_items.dart';
 import 'package:blog_app/product/constants/language_items.dart';
 import 'package:blog_app/product/constants/number_items.dart';
+import 'package:blog_app/product/models/blog_model.dart';
+import 'package:blog_app/product/services/blog_state_notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
 
-class BlogEditScreen extends StatefulWidget {
-  const BlogEditScreen({super.key});
+class BlogEditScreen extends ConsumerStatefulWidget {
+  final BlogModel? blog; // Blog düzenleme için mevcut blogu alalım
+
+  const BlogEditScreen({super.key, this.blog});
 
   @override
-  State<BlogEditScreen> createState() => _BlogEditScreenState();
+  ConsumerState<BlogEditScreen> createState() => _BlogEditScreenState();
 }
 
-class _BlogEditScreenState extends State<BlogEditScreen> {
-  final FocusNode _focusNode = FocusNode();
+class _BlogEditScreenState extends ConsumerState<BlogEditScreen> {
   final _formKey = GlobalKey<FormState>();
   String blogTitle = "";
   String blogContent = "";
   String author = "";
   XFile? selectedImage;
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.blog != null) {
+      blogTitle = widget.blog!.title;
+      blogContent = widget.blog!.content;
+      author = widget.blog!.author;
+    }
+  }
+
   void _submit() async {
-    if (selectedImage != null) {
-      Uri url = Uri.parse("https://tobetoapi.halitkalayci.com/api/Articles");
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
 
-      var request = http.MultipartRequest("POST", url);
-      request.fields["Title"] = blogTitle;
-      request.fields["Content"] = blogContent;
-      request.fields["Author"] = author;
+      try {
+        // Blogu oluştur
+        await ref.read(blogNotifierProvider.notifier).createBlog(
+              title: blogTitle,
+              content: blogContent,
+              author: author,
+              selectedImage: selectedImage,
+            );
 
-      final file = await http.MultipartFile.fromPath("File", selectedImage!.path);
-      request.files.add(file);
-
-      final response = await request.send();
-
-      if (response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Blog başarıyla eklendi!')),
+        );
         Navigator.pop(context);
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Hata: ${e.toString()}')),
+        );
       }
     }
   }
@@ -52,18 +70,6 @@ class _BlogEditScreenState extends State<BlogEditScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _focusNode.requestFocus();
-  }
-
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorsItems.homeBackgroundColor,
@@ -73,7 +79,7 @@ class _BlogEditScreenState extends State<BlogEditScreen> {
               Navigator.pop(context);
             },
             icon: const Icon(Icons.arrow_back_ios_rounded)),
-        title: const Text(LanguageItems.title),
+        title: Text(widget.blog == null ? 'Yeni Blog Ekle' : 'Blog Düzenle'),
       ),
       body: Form(
         key: _formKey,
@@ -132,14 +138,7 @@ class _BlogEditScreenState extends State<BlogEditScreen> {
                   child: const Text(LanguageItems.addImage),
                 ),
                 if (selectedImage != null) Image.file(File(selectedImage!.path)),
-                TextButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        _submit();
-                      }
-                    },
-                    child: const Text(LanguageItems.send))
+                TextButton(onPressed: _submit, child: const Text(LanguageItems.send))
               ],
             ),
           ),

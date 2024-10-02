@@ -1,6 +1,6 @@
 import 'package:blog_app/product/constants/colors_items.dart';
 import 'package:blog_app/feature/screens/pages.dart';
-import 'package:blog_app/providers/blog_provider.dart';
+import 'package:blog_app/product/services/blog_state_notifier.dart';
 import 'package:blog_app/product/widgets/custom_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,7 +40,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       body: SafeArea(
         child: Consumer(
           builder: (context, ref, child) {
-            final blogs = ref.watch(blogProvider);
+            final blogs = ref.watch(blogNotifierProvider);
             return blogs.when(
               loading: () => const Center(
                 child: CircularProgressIndicator(),
