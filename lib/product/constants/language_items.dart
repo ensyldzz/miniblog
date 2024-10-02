@@ -1,4 +1,8 @@
+import 'package:flutter/material.dart';
+
+@immutable
 class LanguageItems {
+  const LanguageItems._();
   static const blogTitle = 'Blog Başlığı';
   static const blogContents = 'Blog İçeriği';
   static const blogAuthor = 'Blog Yazarı';

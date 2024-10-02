@@ -1,6 +1,6 @@
-import 'package:blog_app/constants/constants.dart';
-import 'package:blog_app/language/colors_items.dart';
-import 'package:blog_app/pages/pages.dart';
+import 'package:blog_app/product/constants/constants.dart';
+import 'package:blog_app/product/constants/colors_items.dart';
+import 'package:blog_app/feature/screens/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

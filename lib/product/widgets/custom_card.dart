@@ -1,4 +1,4 @@
-import 'package:blog_app/pages/pages.dart';
+import 'package:blog_app/feature/screens/pages.dart';
 import 'package:flutter/material.dart';
 
 class CustomCard extends StatelessWidget {

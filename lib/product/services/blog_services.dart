@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:blog_app/model/blog_model.dart';
+import 'package:blog_app/product/models/blog_model.dart';
 import 'package:http/http.dart' as http;
 
 class BlogServices {

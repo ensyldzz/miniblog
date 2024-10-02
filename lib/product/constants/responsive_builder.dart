@@ -1,4 +1,4 @@
-import 'package:blog_app/constants/constants.dart';
+import 'package:blog_app/product/constants/constants.dart';
 import 'package:flutter/material.dart';
 
 class ResponsiveBuilder extends StatelessWidget {
@@ -24,15 +24,12 @@ class ResponsiveBuilder extends StatelessWidget {
     BoxConstraints constraints,
   ) desktopBuilder;
 
-  static bool isMobile(BuildContext context) =>
-      ScreenUtil.getWidth(context) < 650;
+  static bool isMobile(BuildContext context) => ScreenUtil.getWidth(context) < 650;
 
   static bool isTablet(BuildContext context) =>
-      ScreenUtil.getWidth(context) < 1248 &&
-      ScreenUtil.getWidth(context) >= 650;
+      ScreenUtil.getWidth(context) < 1248 && ScreenUtil.getWidth(context) >= 650;
 
-  static bool isDesktop(BuildContext context) =>
-      ScreenUtil.getWidth(context) >= 1248;
+  static bool isDesktop(BuildContext context) => ScreenUtil.getWidth(context) >= 1248;
 
   @override
   Widget build(BuildContext context) {

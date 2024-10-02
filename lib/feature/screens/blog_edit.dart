@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'package:blog_app/language/colors_items.dart';
-import 'package:blog_app/language/icon_items.dart';
-import 'package:blog_app/language/language_items.dart';
-import 'package:blog_app/language/number_items.dart';
+import 'package:blog_app/product/constants/colors_items.dart';
+import 'package:blog_app/product/constants/icon_items.dart';
+import 'package:blog_app/product/constants/language_items.dart';
+import 'package:blog_app/product/constants/number_items.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
